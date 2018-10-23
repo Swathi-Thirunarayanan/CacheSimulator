@@ -13,8 +13,9 @@ Cache.c is compiled using command\
       
 Cache object is run using command\
       ```
-      ./Cache c 32 8 1\
+      ./Cache c 32 8 1
       ```
+
 where,\
           1st argument is **_c_** or **_s_**\
           2nd argument is **_Cache Size_**: **_32k_** or **_16k_**
