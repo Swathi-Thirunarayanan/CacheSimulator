@@ -85,7 +85,7 @@ long indexBinary_to_long(int bin[]) {
 	return decimal;
 }
 //**********************************************************************
-// Function Name: indexBinary_to_long 
+// Function Name: tagBinary_to_long 
 // Description:converts Binary to long int decimal.
 // Input: 1D array *	
 // Return: long  
