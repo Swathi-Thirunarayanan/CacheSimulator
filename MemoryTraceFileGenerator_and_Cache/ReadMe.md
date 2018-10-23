@@ -17,4 +17,5 @@ Memory Trace files are generated using Pin Tools.
 - Use trace_fileread_4m to generate only 4 million values memory trace values and to convert it to the required format\
 
 **Note** 
+    Difference between Cache.c and CacheBenchmark.c is BIT_LEN and ADDRESS_LEN. 
             
