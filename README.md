@@ -8,7 +8,11 @@ The developed Cache Simulator uses memory trace file input (generated using pin 
 ## Task
 
 1. Develop your own Cache Simulator to read provided Memory Access Trace Files (trace.din) and simulate the behavior of cache.
-2. Use pin to create memory trace files for Dhrystone and Linpack benchmarks. 
+2. Use pin tool to create memory trace files for Dhrystone and Linpack benchmarks. 
 3. Use these benchmark memory trace files to explore cache miss/hit rates on the developed cache simulator. 
+
+## Pin Tool:
+
+1. Download pin tool from [here](https://software.intel.com/en-us/articles/pin-a-binary-instrumentation-tool-downloads).
 
 
