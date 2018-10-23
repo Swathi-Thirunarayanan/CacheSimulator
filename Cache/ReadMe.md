@@ -20,4 +20,4 @@ where,\
           1st argument is **_c_** or **_s_** (Shared Cache or split Cache)\
           2nd argument is **_Cache Size_**: **_32k_** or **_16k_**\
           3rd argument is **_Block Size_**: **_8_** or **_32_** or **_128_**\
-          4th  argument is **_Associativity_**: **_1_** (Direct Mapping) or **_4_** (4-way mapping)\
+          4th  argument is **_Associativity_**: **_1_** (Direct Mapping) or **_4_** (4-way mapping)
