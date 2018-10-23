@@ -9,7 +9,7 @@ The Trace file trace.din is given in the following format:
 Cache.c is compiled using command\
       ```
       gcc -o Cache Cache.c -lm
-      ```\
+      ```
       
 Cache object is run using command\
       ```
