@@ -4,7 +4,7 @@ The Trace file trace.din is given in the following format:
 0 1000        This is a data read at hex address 1000.
 1 70f60888    This is a data write at hex address 70f60888.
 ```
-##Compiling and Running##
+## Compiling and Running
 Cache.c is compiled using command
       ```
       gcc -o Cache Cache.c -lm
