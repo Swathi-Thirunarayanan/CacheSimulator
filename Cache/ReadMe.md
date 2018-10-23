@@ -11,11 +11,13 @@ Cache.c is compiled using command\
       gcc -o Cache Cache.c -lm
       ```
       
-Cache object is run using command\
+Cache object is run as follows. Example command\
       ```
       ./Cache c 32 8 1
       ```
 
 where,\
-          1st argument is **_c_** or **_s_**\
-          2nd argument is **_Cache Size_**: **_32k_** or **_16k_**
+          1st argument is **_c_** or **_s_** (Shared Cache or split Cache)\
+          2nd argument is **_Cache Size_**: **_32k_** or **_16k_**\
+          3rd argument is **_Block Size_**: **_8_** or **_32_** or **_128_**\
+          4th  argument is **_Associativity_**: **_1_** (Direct Mapping) or **_4_** (4-way mapping)\
