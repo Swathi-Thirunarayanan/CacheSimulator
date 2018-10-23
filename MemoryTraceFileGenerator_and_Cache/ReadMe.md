@@ -15,4 +15,6 @@ Memory Trace files are generated using Pin Tools.
           0x7f1b5c113ea6: W 0x7ffec3424260
       
 - Use trace_fileread_4m to generate only 4 million values memory trace values and to convert it to the required format\
+
+**Note** 
             
