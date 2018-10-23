@@ -14,4 +14,4 @@ Cache object is run using command
       ```
       ./Cache c 32 8 1
       ```
-where the 1st argument is *c* or *s*
+where the 1st argument is *_c_* or *_s_*
