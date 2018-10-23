@@ -6,13 +6,14 @@ The Trace file trace.din is given in the following format:
 1 70f60888    This is a data write at hex address 70f60888.
 ```
 ## Compiling and Running
-Cache.c is compiled using command
+Cache.c is compiled using command\
       ```
       gcc -o Cache Cache.c -lm
       ```
-Cache object is run using command
+Cache object is run using command\
       ```
       ./Cache c 32 8 1
       ```
-where the 1st argument is **_c_** or **_s_**\
+where,\
+          1st argument is **_c_** or **_s_**\
           2nd argument is **_Cache Size_**: **_32k_** or **_16k_**
