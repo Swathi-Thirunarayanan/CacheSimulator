@@ -4,150 +4,148 @@
 #include <stdlib.h>
 
 //Global variables declarations:
-int blockSize;
-
-int cacheSize;
-
-int maxNumberOfBlocks;		//the real number of blocks in cache
-int tagLen;
-int indexLen;			//index length
+int blockSize;			//Block size from argument 3
+int cacheSize;			//Cache size from argument 2
+int maxNumberOfBlocks;		//The real number of blocks in cache
+int tagLen;			//Tag Length
+int indexLen;			//Index Length
 int offsetLen;			//Offset Length
-static int BIT_LEN = 32;
-static int ADDR_LEN = 8;
+static int BIT_LEN = 32;	//No. of Bits for usage in binary number array.
+static int ADDR_LEN = 8;	//Maximum Hexadecimal Adrress Length
 
+//**********************************************************************
+// Function Name: get_LRU 
+// Description: get the LRU Index using counter array of sets
+// Input: 1D array *, int index	
+// Return: int 
+//**********************************************************************
 int get_LRU(int dIndex, int lru[]) {
 	if(lru[dIndex] == 4) lru[dIndex] = 0;
 	return lru[dIndex]++;
 }
-
-int get_LRUInst(int dIndex, int lruInstr[]) {
+//**********************************************************************
+// Function Name: get_LRUInst 
+// Description: get the LRU Instruction Index using counter array of sets
+// Input: 1D array *, int Instruction Index	
+// Return: int 
+//**********************************************************************
+int get_LRUInst(int iIndex, int lruInstr[]) {
 	if(lruInstr[dIndex] == 4) lruInstr[dIndex] = 0;
 	return lruInstr[dIndex]++;
 }
-
+//**********************************************************************
+// Function Name: hex_to_bin 
+// Description: converts hexadecimal values to binary. If the hexadecimal
+//		is not 32 bits, then assigns the remaining bits to 0 after
+//		conversion.
+// Input: 1D array *, int Instruction Index	
+// Return: int 
+//**********************************************************************
 void hex_to_bin(char hex[], int binary_number[]) {
 	int i, j = 0,k, length;
 	unsigned int decimal = 0;
-
+	
+	//Get the length of hexadecimal number obtained from trace file
 	for (length = 0; hex[length] != '\0'; ++length)
 		;
-
+	//Convert hex to decimal
 	for (i = 0; hex[i] != '\0'; ++i, --length)
-
-	{
-
 		if (hex[i] >= '0' && hex[i] <= '9')
-
 			decimal += (hex[i] - '0') * pow(16, length - 1);
-
 		if (hex[i] >= 'A' && hex[i] <= 'F')
-
 			decimal += (hex[i] - 55) * pow(16, length - 1);
-
 		if (hex[i] >= 'a' && hex[i] <= 'f')
-
 			decimal += (hex[i] - 87) * pow(16, length - 1);
-
 	}
-
-	//At this point, variable decimal contains the hexadecimal number in decimal format.
+	//Convert the decimal to binary
 	while (decimal != 0)
-
 	{
-
 		binary_number[j++] = decimal % 2;
-
 		decimal /= 2;
-
 	}
-
+	//Assign remaining bit length to 0
 	if (j < BIT_LEN) {
-
 		for ( k = j; k < BIT_LEN; k++)
-
 			binary_number[k] = 0;
-
 	}
-
 }
-
+//**********************************************************************
+// Function Name: indexBinary_to_long 
+// Description:converts Binary to long int decimal to use as Index for 
+//		arrays.
+// Input: 1D array *	
+// Return: long  
+//**********************************************************************
 long indexBinary_to_long(int bin[]) {
 	int length, i;
 	long decimal = 0;
 	for (i = 0; i < indexLen; i++) {
 		decimal += bin[i] * pow(2, i);
 	}
-
 	return decimal;
-
 }
+//**********************************************************************
+// Function Name: indexBinary_to_long 
+// Description:converts Binary to long int decimal.
+// Input: 1D array *	
+// Return: long  
+//**********************************************************************
 long tagBinary_to_long(int bin[]) {
 	int length, i;
 	long decimal = 0;
 	for (i = 0; i < tagLen; i++) {
 		decimal += bin[i] * pow(2, i);
 	}
-
 	return decimal;
-
 }
 //**********************************************************************
 // Function Name: get_index *
-// Description: get the index from address into decimal value *
-// Input: 1D array *
-// Return: int *
+// Description: get the index from address into binary value
+// Input: 1D array *, 1D array * 
 //**********************************************************************
 void get_index(char addr[], int index[]) {
-
 	int binary_number[BIT_LEN];
 	int i,j,k;
-
+	//converts hex to binary
 	hex_to_bin(addr, binary_number);
-
+	//remove offset by right shifting bits
 	for ( j = 0; j < offsetLen; j++) {
-
-		int n = BIT_LEN;
-
-		for ( i = 0; i < n - 1; i++) {
-
+		int n = BIT_LEN-1;
+		for ( i = 0; i < n ; i++) {
 			binary_number[i] = binary_number[i + 1];
-
 		}
+		//append 0 to the empty locations in the left after shifting		
 		binary_number[n--] = 0;
-
 	}
-	/*printf("Binary Number is: ");
-	 for(int l=0;l<BIT_LEN;l++)
-	 printf("%d", binary_number[l]); */
-
+	//copy the final resultant of binary number after shifting onto index array
 	for ( k = 0; k < indexLen; k++) {
-
 		index[k] = binary_number[k];
-
-		//      printf("%d", index[k]);
 	}
 }
 
 //**********************************************************************
-// Function Name: get_tag *
-// Description: get the tag from address into decimal value *
-// Input: 1D array *
-// Return: long long int *
+// Function Name: get_tag 
+// Description: get the tag from address into binary value *
+// Input: 1D array *, 1D array *
 //**********************************************************************
 void get_tag(char addr[], int tag[]) {
 	int binary_number[BIT_LEN];
 	int k;
 	int l = tagLen - 1;
+	//converts hex to binary
 	hex_to_bin(addr, binary_number);
-
+	//copy elements from leftmost unto taglength value onto tag array.
 	for (k = BIT_LEN - 1; k >= tagLen, l >= 0; k--) {
-
 		tag[l] = binary_number[k];
 		l--;
 	}
-
 }
-
+//**********************************************************************
+// Function Name: main 
+// Description: Reads argument value and input file.
+// Input: 1D , 1D array *
+// Return: int
+//**********************************************************************
 int main(int argc, char *argv[]) {
 
 	//info about trace.din:
@@ -159,19 +157,16 @@ int main(int argc, char *argv[]) {
 	//Data initialization:
 	//preparing i/o files
 	FILE * pfin;
-
 	char *mode = "r";
-
-	//      FILE *pfout;
 	long int i = 0; //counter to know the number of operations
-	static long int j = 0;
-	static long int k = 0;
+	static long int j = 0; //counter to know the number of instruction operations
+	static long int k = 0; //counter to know the number of data operations
 
 	//init hits and misses counters
 	int hit=0;
-	int hit1 = 0;
+	int hit1 = 0;	//hit for instruction cache
 	int miss = 0;
-	int miss1 = 0;
+	int miss1 = 0;	//hit for instruction cache
 
 	int op; //from file
 	char address[ADDR_LEN]; //from file*/
@@ -180,7 +175,6 @@ int main(int argc, char *argv[]) {
 	int lc = 0;
 	int mc = 0;
 	int flag = 0; //match address flag
-
 	char hitORmiss = 'm'; //for debugging
 	int lru_index = 0;
 	long long requiredTag;
@@ -229,11 +223,8 @@ int main(int argc, char *argv[]) {
 
 	for (lc = 0; lc < maxIndexValue; lc++) {
 		for (mc = 0; mc < 4; mc++) {
-			//for (sc = 0; sc < 8; sc++)
-			//{
 			cacheBlockTag[lc][mc] = 0xffffffff;
 			cacheTagInstr[lc][mc] = 0xffffffff;
-			//}
 		}
 		lru[lc] = 0; //means empty
 		lruInstr[lc] = 0;
@@ -275,8 +266,7 @@ int main(int argc, char *argv[]) {
 			for (lc = 0; lc < limit; lc++) {
 				//init flag for tag found (0 = false)
 				flag = 0;
-				//for (sc = 0; sc < tagAddressLength; sc++)
-				//{
+			
 				if ((int)requiredTag == cacheBlockTag[(int)dIndex][lc]) {
 					//if tag is found, set the flag, increase hit counter, write
 					//h in the output file in front of address (for debugging)
@@ -288,13 +278,12 @@ int main(int argc, char *argv[]) {
 					flag = 0;
 				}
 
-				//}
+			
 			}
 			if (flag == 0) {//not found in any set
 				miss++;
 				hitORmiss = 'm';
-				//for (sc = 0; sc < tagAddressLength; sc++)
-				//{
+				
 				if (limit == 1) {
 					//replacement policy
 					cacheBlockTag[(int)dIndex][0] = requiredTag; //only 1 place in DM
@@ -303,15 +292,13 @@ int main(int argc, char *argv[]) {
 					lru_index = get_LRU((int)dIndex, lru);
 					cacheBlockTag[(int)dIndex][lru_index] = requiredTag;
 				}
-				//}
 			
 			}
 			j++;
 		} else { //instructions cache
 			for (lc = 0; lc < limit; lc++) {
 				flag = 0;
-				//for (sc = 0; sc < tagAddressLength; sc++)
-				//{
+				
 				if (requiredTag == cacheTagInstr[(int)dIndex][lc]) {
 					flag = 1;
 					hit1++; //we found a hit
@@ -321,38 +308,30 @@ int main(int argc, char *argv[]) {
 					flag = 0;
 				}
 
-				//}		
+					
 			}
 			if (flag == 0) //not found in any set
 				{
 				miss1++;
 				hitORmiss = 'm';
-				//for (sc = 0; sc < tagAddressLength; sc++)
-				//{
+				
 				if (limit == 1) {
 					cacheTagInstr[(int)dIndex][0] = requiredTag;	//use LRU to get it change 0
 				} else {
 					lru_index = get_LRUInst((int)dIndex, lruInstr);
 					cacheTagInstr[(int)dIndex][lru_index] = requiredTag;
 				}
-				//}
+				
 			}
 			k++;
 		}
 		//count number of entries
 		i++;
-//		printf("%d %s %ld %ld %c\n", op, address, dIndex, requiredTag, hitORmiss);
+
 	}
-	//o/p data in file for debugging
-	//     		 fprintf(pfout, "%d %s %d %lld %lld\n",op,address,indx,requiredTag,addrInLong,hitORmiss);
-	//     		 }
 	
-	
-	//	 fclose(pfout);
 	fclose(pfin);
-//	float percent =((float)hit/(float)i) * 100 ;
-	//-------------------------
-	
+
 	printf("Tag length %d\nindex length %d\noffset length %d\n", tagLen, indexLen, offsetLen);
 	if(cacheCombinedSeparated=='c'){
 	printf("number of requests: %ld \n", i);
