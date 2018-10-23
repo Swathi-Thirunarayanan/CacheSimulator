@@ -13,7 +13,7 @@ Cache.c is compiled using command\
       
 Cache object is run using command\
       ```
-      ./Cache c 32 8 1
+      ./Cache c 32 8 1\
       ```
 where,\
           1st argument is **_c_** or **_s_**\
